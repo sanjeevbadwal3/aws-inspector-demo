@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - pip install awscli
+  build:
+    commands:
+      - echo "Starting SBOM export..."
+      - export RESOURCE_ARN=arn:aws:ecr:us-east-1:332139984345:repository/hello-inspector
+      - aws inspector2 start-sbom-export \
+          --resource-arn $RESOURCE_ARN \
+          --destination s3://my-sbom-storage-sbbadwal/sbom-output/ \
+          --output-format CycloneDx_1_4
+      - echo "SBOM export triggered"
